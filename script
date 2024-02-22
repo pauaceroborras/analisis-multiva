@@ -1,3 +1,14 @@
 dades <- read.csv2("airline_passenger_satisfaction.csv", sep = ",")
 dades <- dades[,-1]
-ytfrfhghfh
+
+View(dades) ### Veure la base de dades
+class(dades) ### Classe
+dim(dades) ### Dimensió
+nrow(dades) ### Nombre de files
+ncol(dades) ### Nombre de columnes
+colnames(dades) ### Nom de les columnes
+rownames(dades) ### Nom de les files
+str(dades) ### Conèixer l’estructura de la base de dades
+
+#Fem un resum
+summary(dades)
