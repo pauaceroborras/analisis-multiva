@@ -15,6 +15,27 @@ path <- "C:/Users/ignasi.juncadella/Downloads/"
 fitxer <- "airlines.RData"
 dades <- get(load(paste0(pah, fitxer)))
 
+# ==============================================================================
+# Transformar 3 variables categòriques a numèriques
+
+food <- dades[,12]
+dec <- runif(length(food), min = 0, max = 0.99)
+food <- food + dec
+
+dades$food_and_drink <- food
+
+online <- dades[,13]
+dec <- runif(length(food), min = 0, max = 0.99)
+online <- online + dec
+
+dades$online_boarding <- online
+
+seat <- dades[,14]
+dec <- runif(length(food), min = 0, max = 0.99)
+seat <- seat + dec
+
+dades$seat_comfort <- seat
+
 # ------------------------------------------------------------------------------
 # Detectem el format de cada variable
 format <- sapply(dades, class)
