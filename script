@@ -1,2 +1,3 @@
 dades <- read.csv2("airline_passenger_satisfaction.csv", sep = ",")
 dades <- dades[,-1]
+ytfrfhghfh
