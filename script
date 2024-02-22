@@ -12,3 +12,23 @@ str(dades) ### Conèixer l’estructura de la base de dades
 
 #Fem un resum
 summary(dades)
+
+# Transformar 3 variables categòriques a numèriques
+
+food <- data[,12]
+dec <- runif(length(food), min = 0, max = 0.99)
+food <- food + dec
+
+data$food_and_drink <- food
+
+online <- data[,13]
+dec <- runif(length(food), min = 0, max = 0.99)
+online <- online + dec
+
+data$online_boarding <- online
+
+seat <- data[,14]
+dec <- runif(length(food), min = 0, max = 0.99)
+seat <- seat + dec
+
+data$seat_comfort <- seat
