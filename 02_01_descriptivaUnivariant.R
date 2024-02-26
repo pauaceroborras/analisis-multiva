@@ -110,18 +110,7 @@ for(vC in varCat) {
 #???
 
 for(vn in varNum) {
-  # Creem la taula 
-  tabla1 <- table(dades[, vn])
-  cat(vn, "\n")
-  cat(tabla1, "\n")
-  
-  # creamos el grásfico correspondiente
-  tabla1 <- data.frame(tabla)
-  
-  grafic <- ggplot(data= tabla, aes(x=Var1, y=Freq)) +
-    geom_bar(stat="identity", fill="steelblue")+
-    geom_text(aes(label=Var1), vjust=-0.3, size=3.5)+
-    theme_minimal()
-  print(grafic)
+  grafic1 <- hist(dades[,vn])
+  print(grafic1)
 }
 # ==============================================================================
