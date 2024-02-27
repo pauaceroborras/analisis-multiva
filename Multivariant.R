@@ -39,7 +39,6 @@ dades$flight_time_difference <- dades$departure_delay_in_minutes -
 
 dades <- dades[, -22]
 
-
 # Eliminar NAs
 
 dades <- dades[-(which(is.na(dades$flight_time_difference))), ]
