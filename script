@@ -1,5 +1,6 @@
-dades <- read.csv2("airline_passenger_satisfaction.csv", sep = ",")
-dades <- dades[,-1]
+library(readr)
+data <- read_csv("airline_passenger_satisfaction.csv")
+data <- data[,-1]
 
 View(dades) ### Veure la base de dades
 class(dades) ### Classe
@@ -11,24 +12,49 @@ rownames(dades) ### Nom de les files
 str(dades) ### Conèixer l’estructura de la base de dades
 
 #Fem un resum
-summary(dades)
+summary(data)
 
-# Transformar 3 variables categòriques a numèriques
+# Transformem 3 variables categòriques a numèriques
+set.seed(123)
+dec <- runif(nrow(data), min = 0, max = 0.99)
 
-food <- data[,12]
-dec <- runif(length(food), min = 0, max = 0.99)
-food <- food + dec
+data$food_and_drink <- data$food_and_drink + dec
+data$online_boarding <- data$online_boarding + dec
+data$seat_comfort <- data$seat_comfort + dec
 
-data$food_and_drink <- food
+#Descriptiva variables categòriques
 
-online <- data[,13]
-dec <- runif(length(food), min = 0, max = 0.99)
-online <- online + dec
+#Gender
+data$Gender <- as.factor(data$Gender)
+table(data$Gender)
+barplot(table(data$Gender))
 
-data$online_boarding <- online
+#customer_type
+data$customer_type <- as.factor(data$customer_type)
+table(data$customer_type)
+barplot(table(data$customer_type))
 
-seat <- data[,14]
-dec <- runif(length(food), min = 0, max = 0.99)
-seat <- seat + dec
+#...
 
-data$seat_comfort <- seat
+#Descriptiva variables numèriques
+
+#age
+summary(data$age)
+par(mfrow=c(1,2))
+hist(data$age,col="lightgreen",main="Histograma de l'edat",xlab="Age")
+boxplot(data$age,col="lightgreen",main="Boxplot de l'edat",ylab="Age")
+
+#flight_distance
+summary(data$flight_distance)
+par(mfrow=c(1,2))
+hist(data$flight_distance,col="lightblue",main="Histograma de la distància del vol",xlab="Flight distance")
+boxplot(data$flight_distance,col="lightblue",main="Boxplot de la distància del vol",ylab="Flight distance")
+#Trobem outliers
+
+#food_and_drink
+summary(data$food_and_drink)
+par(mfrow=c(1,2))
+hist(data$food_and_drink,col="lightyellow",main="Histograma del servei de menjar i beguda",xlab="Food and drink")
+boxplot(data$food_and_drink,col="lightyellow",main="Boxplot del servei de menjar i beguda",ylab="Food and drink")
+
+#...
