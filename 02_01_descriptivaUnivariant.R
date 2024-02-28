@@ -90,7 +90,7 @@ for(vC in varCat) {
   cat(vC, "\n")
   cat(tabla, "\n")
   
-  # creamos el grásfico correspondiente
+  # creamos el gráfico correspondiente
   tabla <- data.frame(tabla)
   
   grafic <- ggplot(data= tabla, aes(x=Var1, y=Freq)) +
