@@ -43,40 +43,63 @@ fitxer <- "airlines.RData"
 dades <- get(load(paste0(path, fitxer)))
 
 # ==============================================================================
-# Transformar 3 variables categòriques a numèriques
+# Eliminació de la columna ID
+
+dades <- dades[,-1]
+
+# Transformació de 3 variables discretes a contínues
 
 food <- dades[,12]
-dec <- runif(length(food), min = 0, max = 0.99)
-food <- food + dec
+dec1 <- runif(length(food), min = 0, max = 0.99)
+food <- food + dec1
 
 dades$food_and_drink <- food
 
 online <- dades[,13]
-dec <- runif(length(food), min = 0, max = 0.99)
-online <- online + dec
+dec2 <- runif(length(food), min = 0, max = 0.99)
+online <- online + dec2
 
 dades$online_boarding <- online
 
 seat <- dades[,14]
-dec <- runif(length(food), min = 0, max = 0.99)
-seat <- seat + dec
+dec3 <- runif(length(food), min = 0, max = 0.99)
+seat <- seat + dec3
 
 dades$seat_comfort <- seat
 
-# ==============================================================================
-#Fiquem bé el format de les variables
+# Passar a numèrica una variable llegida com a caràcter
 
-dades<-dades[,-1]
-dades$departure_delay_in_minutes<-as.numeric(dades$departure_delay_in_minutes)
-dades$inflight_wifi_service<-as.factor(dades$inflight_wifi_service)
-dades$departure_arrival_time_convenient<-as.factor(dades$departure_arrival_time_convenient)
-dades$ease_of_online_booking<-as.factor(dades$ease_of_online_booking)
-dades$age<-as.numeric(dades$age)
-dades$flight_distance<-as.numeric(dades$flight_distance)
-dades$age<-as.numeric(dades$age)
+dades$arrival_delay_in_minutes <- as.numeric(dades$arrival_delay_in_minutes)
 
-dades$satisfaction<-as.factor(dades$satisfaction)
+# Declaració d'una nova variable
 
+dades$flight_time_difference <- dades$departure_delay_in_minutes -
+  dades$arrival_delay_in_minutes
+
+dades <- dades[, -22]
+
+# Eliminar NAs
+
+dades <- dades[-(which(is.na(dades$flight_time_difference))), ]
+
+# Passar a factor les variables categòriques
+
+dades$Gender <- as.factor(dades$Gender)
+dades$customer_type <- as.factor(dades$customer_type)
+dades$type_of_travel <- as.factor(dades$type_of_travel)
+dades$customer_class <- as.factor(dades$customer_class)
+dades$inflight_wifi_service <- as.factor(dades$inflight_wifi_service)
+dades$departure_arrival_time_convenient <- as.factor(dades$departure_arrival_time_convenient)
+dades$ease_of_online_booking <- as.factor(dades$ease_of_online_booking)
+dades$gate_location <- as.factor(dades$gate_location)
+dades$inflight_entertainment <- as.factor(dades$inflight_entertainment)
+dades$onboard_service <- as.factor(dades$onboard_service)
+dades$leg_room_service <- as.factor(dades$leg_room_service)
+dades$baggage_handling <- as.factor(dades$baggage_handling)
+dades$checkin_service <- as.factor(dades$checkin_service)
+dades$inflight_service <- as.factor(dades$inflight_service)
+dades$cleanliness <- as.factor(dades$cleanliness)
+dades$satisfaction <- as.factor(dades$satisfaction)
 
 # ------------------------------------------------------------------------------
 # Detectem el format de cada variable
