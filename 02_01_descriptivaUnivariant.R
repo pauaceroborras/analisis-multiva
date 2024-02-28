@@ -106,11 +106,13 @@ for(vC in varCat) {
 
 
 # ==============================================================================
-#Seguim amb la descriptiva de les variables numèriques
-#???
+# Descriptiva univariant de les variables numèriques
 
-for(vn in varNum) {
-  grafic1 <- hist(dades[,vn])
-  print(grafic1)
+for(vC in varNum){
+  cat("Resum estadístic de la variable", vC, "\n")
+  print(summary(dades[, vC]))
+  cat("\n")
+  
+  hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
 }
 # ==============================================================================
