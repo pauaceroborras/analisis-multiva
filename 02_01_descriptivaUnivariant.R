@@ -131,11 +131,11 @@ for(vC in varCat) {
 # ==============================================================================
 # Descriptiva univariant de les variables numèriques
 
-for(vC in varNum){
-  cat("Resum estadístic de la variable", vC, "\n")
-  print(summary(dades[, vC]))
+for(vN in varNum){
+  cat("Resum estadístic de la variable", vN, "\n")
+  print(summary(dades[, vN]))
   cat("\n")
   
-  hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
+  hist(dades[, vN], main = paste0("Histograma de la variable ", vN), col = "skyblue")
 }
 # ==============================================================================
