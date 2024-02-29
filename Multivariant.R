@@ -16,7 +16,7 @@ fitxer <- "datos.csv"
 dades <- read.csv(paste0(path, fitxer)); cat("S'han llegit les dades./n")
 # ==============================================================================
 # cambiem el nom de la bbdd
-colnames(dades) <- c("", "", "", "")
+#colnames(dades) <- c("", "", "", "")
 # ==============================================================================
 # Guardem la bbdd
 fitxerFin <- "airlines.RData"
@@ -75,9 +75,9 @@ for (i in 1:ncol(dades)) {
 # ==============================================================================
 # Imputació NAs
 
-dades <- 
-
-# ==============================================================================
+#dades <- 
+  
+  # ==============================================================================
 # Passar a factor les variables categòriques
 
 dades$Gender <- as.factor(dades$Gender)
@@ -135,3 +135,4 @@ for(vC in varNum){
   
   hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
 }
+
