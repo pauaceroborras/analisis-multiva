@@ -259,3 +259,12 @@ complete.data1 <- mice::complete(imputed_data1)
 
 plot(density(complete.data1$flight_time_difference))
 plot(density(dades$flight_time_difference, na.rm = T))
+
+# Gràfics categòriques vs numèriques
+
+ggplot(dades, aes(x = age, fill =  customer_type)) +
+          geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
+          labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
+                     x = "Edat",
+                     y = "Freqüència") 
+          +     theme_minimal()
