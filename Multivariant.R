@@ -58,6 +58,21 @@ dades$flight_time_difference <- dades$departure_delay_in_minutes -
   dades$arrival_delay_in_minutes
 dades <- dades[, -22] #eliminem la vartiable arrival_delay_in_minutes
 # ==============================================================================
+# Identificar NAs
+
+# Inicializar el vector NAs con ceros
+NAs <- rep(0, ncol(dades))
+
+# Iterar sobre las columnas del dataframe
+for (i in 1:ncol(dades)) {
+  for (j in 1:nrow(dades)) {
+    if (is.na(dades[j, i])) {
+      NAs[i] <- NAs[i] + 1
+    }
+  }
+  cat("\n La variable", names(dades)[i], "contiene", NAs[i], "missing(s).\n")
+}
+# ==============================================================================
 # Imputació NAs
 
 dades <- 
