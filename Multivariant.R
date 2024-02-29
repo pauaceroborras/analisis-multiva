@@ -183,7 +183,29 @@ for(i in var){
     }
   }
 }
+
 # ==============================================================================
+# Descriptiva bivariant categorica vs numèrica:
+
+var <- colnames(dades)
+for(i in var){
+  for(j in var){
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varNum && j %in% varCat && i != j){
+        taula <- describeBy(dades[[i]], group = dades[[j]])
+        cat("Taula bivariant de la variable", i,"segons els grups de ", j)
+        print(taula)
+        cat("\n")
+      }
+      if(i %in% varCat && j %in% varNum && i != j){
+        taula <- describeBy(dades[[j]], group = dades[[i]])
+        cat("Taula bivariant de la variable", j,"segons els grups de ", i)
+        print(taula)
+        cat("\n")
+      }
+    }
+  }
+}
 
 
 # Univariante: 
