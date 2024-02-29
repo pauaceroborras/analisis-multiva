@@ -136,3 +136,36 @@ for(vC in varNum){
   hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
 }
 
+# Univariante: 
+## numerica
+### histograma (si es normal boxplot)
+### summary de los valores (describe paquete psych)
+## categorico
+### barplot
+### tabla de frecuencias (absoluta o relativo)
+
+# Bivariante: 
+## num vs numerico
+### scatterplot 
+### correlaciones
+## num vs categorico
+### histograma multiple o boxplot multiple (si es normal)
+### summary de los valores (describeBy paquete psych)
+## cat vs cat
+### barplot multiple
+### tabla de contigencia (table de dos variables) y test chi quadrado 
+
+
+# ==============================================================================
+# IMPUTACIO 
+library(VIM)
+aggr(dades, numbers = T, sortVar = T)
+
+mcar(dades)
+
+imputed_data1 <- mice(dades,m = 5,
+                      maxit = 20, method = "pmm",seed = 2018)
+complete.data1 <- mice::complete(imputed_data1)
+
+plot(density(complete.data1$flight_time_difference))
+plot(density(dades$flight_time_difference, na.rm = T))
