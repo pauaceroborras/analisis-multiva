@@ -1,0 +1,25 @@
+var <- colnames(dades)
+
+for(i in var){
+  for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varNum && j %in% varCat && i != j){
+          
+         cat("Anàlisi bivariant de la variable", i, "i la variable", j, "\n")
+         taula <- describeBy(dades[[i]],group=dades[[j]])
+         print(taula)
+         
+          cat("\n")
+          
+          grafic <- ggplot(dades, aes(x = dades[[i]], fill =  dades[[j]])) +
+            geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
+            labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
+                 x = i,
+                 y = "Freqüència",
+                 fill=j)
+          print(grafic)
+      }
+    }
+  }
+}
