@@ -135,6 +135,56 @@ for(vC in varNum){
   
   hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
 }
+# ==============================================================================
+# Descriptiva bivariant, categorica vs categorica, numerica vs numerica, categorica vs numerica y numerica vs categorica
+
+library(RColorBrewer)
+for(i in var){
+  
+  for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varCat && j %in% varCat){
+        if (i %in% varCat && j %in% varCat) {
+          cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
+          taula <- table(dades[[i]], dades[[j]])
+          print(taula)
+          cat("\n")
+          
+          pvalor <- chisq.test(dades[[i]], dades[[j]])$p.value
+          cat("El p-valor del test chi-quadrat és: ", pvalor, "\n")
+          
+          png(nombre_archivo, width = 800, height = 600)
+          nombres <- levels(dades[[i]])
+          colores_barras <- brewer.pal(length(nombres), "Blues") 
+          barras <- barplot(taula, xlab = i, ylab = j, col = colores_barras)
+          legend("topright", legend = nombres, fill = colores_barras, title = "Grupos")
+          
+          dev.off()
+        }
+        
+      }
+      if(i %in% varNum && j %in% varNum && i != j){
+        correlacion <- cor(dades[[i]],dades[[j]], use = "complete.obs")
+        png(nombre_archivo, width = 800, height = 600)
+        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
+        text(x = max(dades[[i]])*0.8, y = max(dades[[j]])*0.9, 
+             labels = paste("Correlación:", round(correlacion, 4)), 
+             pos = 4, col = "red", cex = 1.2)
+        dev.off()
+        cat("Gráfico", i, "guardado como", nombre_archivo, "\n")
+      }
+      if(i %in% varNum && j %in% varCat && i != j){
+        #cat(i," ");cat(j,"\n")
+      }
+      if(i %in% varCat && j %in%varNum){
+        #cat(i," ");cat(j,"\n")
+      }
+    }
+  }
+}
+# ==============================================================================
+
 
 # Univariante: 
 ## numerica
