@@ -155,6 +155,24 @@ for(vC in varNum){
 ### barplot multiple
 ### tabla de contigencia (table de dos variables) y test chi quadrado 
 
+var <- colnames(dades)
+
+for(i in var){
+  for(j in var){
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varCat && j %in% varCat){
+        cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
+        taula <- table(dades[[i]], dades[[j]])
+        print(taula)
+        cat("\n")
+        barplot(taula, xlab = i, ylab = j)
+      }
+      if(i %in% varNum && j %in% varNum){
+        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
+     }
+   }
+  }
+}
 
 # ==============================================================================
 # IMPUTACIO 
