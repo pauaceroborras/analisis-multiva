@@ -1,0 +1,33 @@
+for(i in var){
+  
+  for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varCat && j %in% varCat){
+        #cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
+        #taula <- table(dades[[i]], dades[[j]])
+        #print(taula)
+        #cat("\n")
+        #png(nombre_archivo, width = 800, height = 600)
+        #barplot(taula, xlab = i, ylab = j)
+        #dev.off() 
+        
+      }
+      if(i %in% varNum && j %in% varNum && i != j){
+        correlacion <- cor(dades[[i]],dades[[j]])
+        png(nombre_archivo, width = 800, height = 600)
+        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
+        text(400, 300, labels = paste("Correlación:", round(correlacion, 2)), col = "red", cex = 1.2)
+        dev.off()
+        cat("Gráfico", i, "guardado como", nombre_archivo, "\n")
+        cat("Dos numericas")
+      }
+      if(i %in% varNum && j %in% varCat && i != j){
+        #cat(i," ");cat(j,"\n")
+      }
+      if(i %in% varCat && j %in%varNum){
+        #cat(i," ");cat(j,"\n")
+      }
+    }
+  }
+}
