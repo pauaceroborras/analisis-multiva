@@ -69,11 +69,6 @@ for (i in 1:ncol(dades)) {
   }
   cat("\n La variable", names(dades)[i], "contiene", NAs[i], "missing(s).\n")
 }
-# ==============================================================================
-# Imputació NAs
-
-#dades <- 
-  
   # ==============================================================================
 # Passar a factor les variables categòriques
 
@@ -217,9 +212,19 @@ colnames(dadesfinals) <- c("Genere","Tipus_client","Edat","Tipus_viatge",
                            "Embarcament","Comoditat","Servei","Retard_sortida",
                            "Satsifaccio","Diferencia_durada")
 
+
+# ==============================================================================
+# SELECCIÓ DE FILES
+keep <- which(is.na(dadesfinals$Diferencia_durada))
+dadesnoNAs <- dadesfinals[-keep,]
+dadesnoNAs <- dadesnoNAs[sample(nrow(dadesnoNAs),2700),]
+dadesNAs <- dadesfinals[keep,]
+dadesfinals <- rbind(dadesnoNAs,dadesNAs)
+dadesfinals <- dadesfinals[sample(nrow(dadesfinals)),]
+
+
 # ==============================================================================
 # IMPUTACIÓ 
-library(VIM)
 aggr(dadesfinals, numbers = T, sortVar = T)
 
 mcar(dadesfinals)
@@ -228,9 +233,12 @@ imputed_data1 <- mice(dadesfinals,m = 5,
                       maxit = 20, method = "pmm",seed = 2018)
 complete.data1 <- mice::complete(imputed_data1)
 
-plot(density(complete.data1$flight_time_difference))
-plot(density(dadesfinals$flight_time_difference, na.rm = T))
+plot(density(complete.data1$Diferencia_durada))
+plot(density(dadesfinals$Diferencia_durada, na.rm = T))
 
+dadesfinals <- complete.data1
+
+# ==============================================================================
 # Gràfics categòriques vs numèriques
 
 ggplot(dadesfinals, aes(x = age, fill =  customer_type)) +
