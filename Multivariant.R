@@ -220,20 +220,20 @@ colnames(dadesfinals) <- c("Genere","Tipus_client","Edat","Tipus_viatge",
 # ==============================================================================
 # IMPUTACIÓ 
 library(VIM)
-aggr(dades, numbers = T, sortVar = T)
+aggr(dadesfinals, numbers = T, sortVar = T)
 
-mcar(dades)
+mcar(dadesfinals)
 
-imputed_data1 <- mice(dades,m = 5,
+imputed_data1 <- mice(dadesfinals,m = 5,
                       maxit = 20, method = "pmm",seed = 2018)
 complete.data1 <- mice::complete(imputed_data1)
 
 plot(density(complete.data1$flight_time_difference))
-plot(density(dades$flight_time_difference, na.rm = T))
+plot(density(dadesfinals$flight_time_difference, na.rm = T))
 
 # Gràfics categòriques vs numèriques
 
-ggplot(dades, aes(x = age, fill =  customer_type)) +
+ggplot(dadesfinals, aes(x = age, fill =  customer_type)) +
           geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
           labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
                      x = "Edat",
