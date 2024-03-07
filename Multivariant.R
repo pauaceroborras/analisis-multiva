@@ -185,64 +185,30 @@ for(i in var){
 # Descriptiva bivariant categorica vs numèrica:
 
 var <- colnames(dades)
+
 for(i in var){
   for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
     if(i != j && which(var == i) < which(var == j)){
       if(i %in% varNum && j %in% varCat && i != j){
-        taula <- describeBy(dades[[i]], group = dades[[j]])
-        cat("Taula bivariant de la variable", i,"segons els grups de ", j)
-        print(taula)
-        cat("\n")
-      }
-      if(i %in% varCat && j %in% varNum && i != j){
-        taula <- describeBy(dades[[j]], group = dades[[i]])
-        cat("Taula bivariant de la variable", j,"segons els grups de ", i)
-        print(taula)
-        cat("\n")
+          
+         cat("Anàlisi bivariant de la variable", i, "i la variable", j, "\n")
+         taula <- describeBy(dades[[i]],group=dades[[j]])
+         print(taula)
+         
+          cat("\n")
+          
+          grafic <- ggplot(dades, aes(x = dades[[i]], fill =  dades[[j]])) +
+            geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
+            labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
+                 x = i,
+                 y = "Freqüència",
+                 fill=j)
+          print(grafic)
       }
     }
   }
 }
-
-
-# Univariante: 
-## numerica
-### histograma (si es normal boxplot)
-### summary de los valores (describe paquete psych)
-## categorico
-### barplot
-### tabla de frecuencias (absoluta o relativo)
-
-# Bivariante: 
-## num vs numerico
-### scatterplot 
-### correlaciones
-## num vs categorico
-### histograma multiple o boxplot multiple (si es normal)
-### summary de los valores (describeBy paquete psych)
-## cat vs cat
-### barplot multiple
-### tabla de contigencia (table de dos variables) y test chi quadrado 
-
-var <- colnames(dades)
-
-for(i in var){
-  for(j in var){
-    if(i != j && which(var == i) < which(var == j)){
-      if(i %in% varCat && j %in% varCat){
-        cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
-        taula <- table(dades[[i]], dades[[j]])
-        print(taula)
-        cat("\n")
-        barplot(taula, xlab = i, ylab = j)
-      }
-      if(i %in% varNum && j %in% varNum){
-        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
-     }
-   }
-  }
-}
-
 # ==============================================================================
 # SELECCIÓ DE COLUMNES
 dadesfinals <- dades[,-c(7,8,10,14,16,17,18,19,20)]
@@ -273,3 +239,116 @@ ggplot(dades, aes(x = age, fill =  customer_type)) +
                      x = "Edat",
                      y = "Freqüència") 
           +     theme_minimal()
+
+# ==============================================================================
+# Crear vectors amb els noms de les variables numèriques i categòriques
+
+format <- sapply(dadesfinals, class)
+
+varNum <- names(format)[which(format %in% c("numeric","integer"))]
+varCat <- colnames(dadesfinals)[which(!colnames(dadesfinals) %in% varNum)]
+
+# ==============================================================================
+# Descriptiva univariant de les variables categòriques
+
+for(vC in varCat) {
+  # Creem la taula 
+  tabla <- table(dadesfinals[, vC])
+  cat(vC, "\n")
+  cat(tabla, "\n")
+  
+  # creamos el gráfico correspondiente
+  tabla <- data.frame(tabla)
+  
+  grafic <- ggplot(data= tabla, aes(x=Var1, y=Freq)) +
+    geom_bar(stat="identity", fill="steelblue")+
+    geom_text(aes(label=Var1), vjust=-0.3, size=3.5)+
+    theme_minimal()
+  print(grafic)
+}
+
+# ==============================================================================
+# Descriptiva univariant de les variables numèriques
+
+for(vC in varNum){
+  cat("Resum estadístic de la variable", vC, "\n")
+  print(summary(dades[, vC]))
+  cat("\n")
+  
+  hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
+}
+# ==============================================================================
+# Descriptiva bivariant, categorica vs categorica, numerica vs numerica, categorica vs numerica y numerica vs categorica
+
+library(RColorBrewer)
+for(i in var){
+  
+  for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varCat && j %in% varCat){
+        if (i %in% varCat && j %in% varCat) {
+          cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
+          taula <- table(dades[[i]], dades[[j]])
+          print(taula)
+          cat("\n")
+          
+          pvalor <- chisq.test(dades[[i]], dades[[j]])$p.value
+          cat("El p-valor del test chi-quadrat és: ", pvalor, "\n")
+          
+          png(nombre_archivo, width = 800, height = 600)
+          nombres <- levels(dades[[i]])
+          colores_barras <- brewer.pal(length(nombres), "Blues") 
+          barras <- barplot(taula, xlab = i, ylab = j, col = colores_barras)
+          legend("topright", legend = nombres, fill = colores_barras, title = "Grupos")
+          
+          dev.off()
+        }
+        
+      }
+      if(i %in% varNum && j %in% varNum && i != j){
+        correlacion <- cor(dades[[i]],dades[[j]], use = "complete.obs")
+        png(nombre_archivo, width = 800, height = 600)
+        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
+        text(x = max(dades[[i]])*0.8, y = max(dades[[j]])*0.9, 
+             labels = paste("Correlación:", round(correlacion, 4)), 
+             pos = 4, col = "red", cex = 1.2)
+        dev.off()
+        cat("Gráfico", i, "guardado como", nombre_archivo, "\n")
+      }
+      if(i %in% varNum && j %in% varCat && i != j){
+        #cat(i," ");cat(j,"\n")
+      }
+      if(i %in% varCat && j %in%varNum){
+        #cat(i," ");cat(j,"\n")
+      }
+    }
+  }
+}
+
+# ==============================================================================
+var <- colnames(dades)
+
+for(i in var){
+  for(j in var){
+    nombre_archivo <- paste0("grafico_", i,j, ".png")
+    if(i != j && which(var == i) < which(var == j)){
+      if(i %in% varNum && j %in% varCat && i != j){
+          
+         cat("Anàlisi bivariant de la variable", i, "i la variable", j, "\n")
+         taula <- describeBy(dades[[i]],group=dades[[j]])
+         print(taula)
+         
+          cat("\n")
+          
+          grafic <- ggplot(dades, aes(x = dades[[i]], fill =  dades[[j]])) +
+            geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
+            labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
+                 x = i,
+                 y = "Freqüència",
+                 fill=j)
+          print(grafic)
+      }
+    }
+  }
+}
