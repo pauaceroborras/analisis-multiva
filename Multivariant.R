@@ -15,9 +15,6 @@ path <- "C:/Users/ignasi.juncadella/Downloads/"
 fitxer <- "datos.csv"
 dades <- read.csv(paste0(path, fitxer)); cat("S'han llegit les dades./n")
 # ==============================================================================
-# cambiem el nom de la bbdd
-#colnames(dades) <- c("", "", "", "")
-# ==============================================================================
 # Guardem la bbdd
 fitxerFin <- "airlines.RData"
 save(dades, file = paste0(path, fitxerFin)); cat("S'ha guardat les dades en", paste0(path, fitxerFin), "/n")
@@ -247,7 +244,15 @@ for(i in var){
 }
 
 # ==============================================================================
-# IMPUTACIO 
+# SELECCIÓ DE COLUMNES
+dadesfinals <- dades[,-c(7,8,10,14,16,17,18,19,20)]
+colnames(dadesfinals) <- c("Genere","Tipus_client","Edat","Tipus_viatge",
+                           "Classe_client","Distancia","Booking","Menjar",
+                           "Embarcament","Comoditat","Servei","Retard_sortida",
+                           "Satsifaccio","Diferencia_durada")
+
+# ==============================================================================
+# IMPUTACIÓ 
 library(VIM)
 aggr(dades, numbers = T, sortVar = T)
 
