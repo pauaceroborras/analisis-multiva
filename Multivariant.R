@@ -272,10 +272,10 @@ for(vC in varCat) {
 
 for(vC in varNum){
   cat("Resum estadístic de la variable", vC, "\n")
-  print(summary(dades[, vC]))
+  print(summary(dadesfinals[, vC]))
   cat("\n")
   
-  hist(dades[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
+  hist(dadesfinals[, vC], main = paste0("Histograma de la variable ", vC), col = "skyblue")
 }
 # ==============================================================================
 # Descriptiva bivariant, categorica vs categorica, numerica vs numerica, categorica vs numerica y numerica vs categorica
@@ -289,15 +289,15 @@ for(i in var){
       if(i %in% varCat && j %in% varCat){
         if (i %in% varCat && j %in% varCat) {
           cat("Taula bivariant de la variable", i, "i la variable", j, "\n")
-          taula <- table(dades[[i]], dades[[j]])
+          taula <- table(dadesfinals[[i]], dadesfinals[[j]])
           print(taula)
           cat("\n")
           
-          pvalor <- chisq.test(dades[[i]], dades[[j]])$p.value
+          pvalor <- chisq.test(dadesfinals[[i]], dadesfinals[[j]])$p.value
           cat("El p-valor del test chi-quadrat és: ", pvalor, "\n")
           
           png(nombre_archivo, width = 800, height = 600)
-          nombres <- levels(dades[[i]])
+          nombres <- levels(dadesfinals[[i]])
           colores_barras <- brewer.pal(length(nombres), "Blues") 
           barras <- barplot(taula, xlab = i, ylab = j, col = colores_barras)
           legend("topright", legend = nombres, fill = colores_barras, title = "Grupos")
@@ -307,10 +307,10 @@ for(i in var){
         
       }
       if(i %in% varNum && j %in% varNum && i != j){
-        correlacion <- cor(dades[[i]],dades[[j]], use = "complete.obs")
+        correlacion <- cor(dadesfinals[[i]],dadesfinals[[j]], use = "complete.obs")
         png(nombre_archivo, width = 800, height = 600)
-        plot(dades[[i]], dades[[j]], xlab = i, ylab = j, col = "skyblue")
-        text(x = max(dades[[i]])*0.8, y = max(dades[[j]])*0.9, 
+        plot(dadesfinals[[i]], dadesfinals[[j]], xlab = i, ylab = j, col = "skyblue")
+        text(x = max(dadesfinals[[i]])*0.8, y = max(dadesfinals[[j]])*0.9, 
              labels = paste("Correlación:", round(correlacion, 4)), 
              pos = 4, col = "red", cex = 1.2)
         dev.off()
@@ -336,12 +336,12 @@ for(i in var){
       if(i %in% varNum && j %in% varCat && i != j){
           
          cat("Anàlisi bivariant de la variable", i, "i la variable", j, "\n")
-         taula <- describeBy(dades[[i]],group=dades[[j]])
+         taula <- describeBy(dadesfinals[[i]],group=dadesfinals[[j]])
          print(taula)
          
           cat("\n")
           
-          grafic <- ggplot(dades, aes(x = dades[[i]], fill =  dades[[j]])) +
+          grafic <- ggplot(dadesfinals, aes(x = dadesfinals[[i]], fill =  dadesfinals[[j]])) +
             geom_histogram(position = "identity", alpha = 0.5, bins = 20) +
             labs(title = "Histograma Múltiple de Variable Numérica por Categoría",
                  x = i,
