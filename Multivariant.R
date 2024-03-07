@@ -131,6 +131,7 @@ for(vC in varNum){
 # Descriptiva bivariant, categorica vs categorica, numerica vs numerica, categorica vs numerica y numerica vs categorica
 
 library(RColorBrewer)
+var <- colnames(dades)
 for(i in var){
   
   for(j in var){
@@ -289,6 +290,7 @@ for(vC in varNum){
 # Descriptiva bivariant, categorica vs categorica, numerica vs numerica, categorica vs numerica y numerica vs categorica
 
 library(RColorBrewer)
+var <- colnames(dadesfinals)
 for(i in var){
   
   for(j in var){
