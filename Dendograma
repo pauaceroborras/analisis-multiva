@@ -1,7 +1,3 @@
-#Retrieve the data saved AFTER the preprocessing practice...... 
-#this means data already cleaned
-
-
 dd <- dadesfinals
 names(dd)
 dim(dd)
@@ -9,43 +5,20 @@ summary(dd)
 
 attach(dd)
 
-#set a list of numerical variables
 names(dd)
-
-#hierarchical clustering
-
-#euclidean distance si totes son numeriques
-#dcon<-data.frame (Antiguedad.Trabajo,Plazo,Edad,Gastos,Ingresos,Patrimonio,Cargas.patrimoniales,Importe.solicitado,Precio.del.bien.financiado,Estalvi, RatiFin)
-
-#d  <- dist(dcon[1:10,])
-
-#move to Gower mixed distance to deal 
-#simoultaneously with numerical and qualitative data
 
 library(cluster)
 
-#dissimilarity matrix
-#do not include in actives the identifier variables nor the potential response variable
-
 actives<-c(1:14)
-#actives<-c(2:27,76:79)
-
-
-#select a random sample if your dataset is too big and implement a CURE policy
-#building distance matrices is quadratic and can't scale directly
-
-
-filtro<-which(dd[,3]%in% c("Plurifamiliar","Unifamiliar", "Alojamiento"))
 
 n<-dim(dd)[1]
 filtro<-c(1:n)
 
-dissimMatrix <- daisy(dd[filtro,actives], metric = "gower", stand=TRUE)
+dissimMatrix <- daisy(dd[,actives], metric = "gower", stand=TRUE)
 
 distMatrix<-dissimMatrix^2
 
-h1 <- hclust(distMatrix,method="ward.D2")  # NOTICE THE COST
-#versions noves "ward.D" i abans de plot: par(mar=rep(2,4)) si se quejara de los margenes del plot
+h1 <- hclust(distMatrix,method="ward.D2") 
 class(h1)
 str(h1)
 
@@ -54,27 +27,15 @@ plot(h1)
 dissimMatrix <- daisy(dd[1:20,actives], metric = "gower", stand=TRUE)
 
 distMatrix<-dissimMatrix^2
-h2 <- hclust(distMatrix,method="ward.D2")  # NOTICE THE COST
-#versions noves "ward.D" i abans de plot: par(mar=rep(2,4)) si se quejara de los margenes del plot
+h2 <- hclust(distMatrix,method="ward.D2")  
 
-plot(h2)
 plot(h2)
 
 k<-4
-#k<-6
 
 c2 <- cutree(h1,k)
 c2
-dd[,17]<-c2
+dd[,15]<-c2
 
-#To compute the caliski-harabasz index
-#library(fpc)
-#calinhara(dd,c2,k)
-
-#class sizes 
 table(c2)
 
-#comparing with other partitions
-#table(c1,c2)
-
-#Profiling plots
