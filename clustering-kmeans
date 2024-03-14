@@ -1,0 +1,55 @@
+# ==============================================================================
+# [AMD]       clustering-kmeans.R
+# 
+# Autor:      Ignasi Juncadella, (c) 22.02.2024
+# Llençament: 
+#     source(".../clustering-kmeans.R")
+# ==============================================================================
+
+#En primer lugar, nos quedamos con el dataframe únicamente con variables numéricas
+
+dcon <- data.frame(Edat,Distancia,Menjar,Embarcament,Comoditat,Retard_sortida,Diferencia_durada)
+
+#Método del codo para escoger el mejor k para kmeans
+
+sse <- numeric(length(10))
+for (k in 1:10) {
+  kmeans_model <- kmeans(dcon, k)
+  sse[k] <- kmeans_model$tot.withinss
+}
+
+plot <- ggplot(data.frame(x=1:10, y=sse), aes(x, y)) +
+  geom_line() +
+  geom_point() +
+  labs(x="Number of clusters", y="SSE")
+plot
+
+#Escogemos k=3
+
+#Aplicamos el algoritmo kmeans
+
+k<-3
+k1 <- kmeans(dcon,k)
+
+k1$size
+
+k1$centers
+
+dadesfinals[,15]<-k1$cluster
+names(dadesfinals)[15]<-"Kmeans"
+
+
+########################################################################################
+# No funciona porque el paquete no es compatible con los PCs de clase
+
+#CH_index <- fpc::calinski.test(datos, clustering$cluster)$value
+
+#CH_indexes <- vector()
+#for (k in 1:10) {
+#  kmeans_result <- kmeans(dcon, centers = k)
+#  CH_index <- calinskiHarabasz(dcon, kmeans_result$cluster)
+#  CH_indexes[k] <- CH_index
+#}
+#
+#CH_df <- data.frame(k = 1:10, CH = CH_indexes)
+#ggplot(CH_df, aes(x = k, y = CH)) + geom_point() + geom_line()
