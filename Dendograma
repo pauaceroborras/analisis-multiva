@@ -1,3 +1,4 @@
+#DENDOGRAMA MIXTO
 dd <- dadesfinals
 names(dd)
 dim(dd)
@@ -39,3 +40,26 @@ dd[,15]<-c2
 
 table(c2)
 
+
+#INDICE KH
+
+library(cluster)
+library(clusterSim)
+library(fpc)
+library(pracma)
+library(ggplot2)
+
+km <- kmeans(h1$merge,3)
+calinhara(h1$merge,km$cluster,cn=max(km$cluster))
+
+CH_indexes <- vector()
+
+set.seed(123)
+for (k in 1:10) {
+  kmeans_result <- kmeans(h1$merge, centers = k)
+  CH_index <- calinhara(h1$merge, kmeans_result$cluster)
+  CH_indexes[k] <- CH_index
+}
+
+CH_df <- data.frame(k = 1:10, CH = CH_indexes)
+ggplot(CH_df, aes(x = k, y = CH)) + geom_point() + geom_line()
