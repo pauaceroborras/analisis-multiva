@@ -7,7 +7,9 @@
 # ==============================================================================
 # Carreguem les llibreries necesaries
 library(psych)
-library(ggplot2)  
+library(ggplot2)
+library(VIM)
+library(mice)
 
 # ==============================================================================
 # Llegim la bbdd
