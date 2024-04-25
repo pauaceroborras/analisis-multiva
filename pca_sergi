@@ -1,0 +1,28 @@
+
+#PREREQUISITES: 
+#factors are properly labelled and reading data makes R to directly recognize them
+#Numerical variables do not contain missing values anymore. They have been imputed in preprocessing step
+
+#  READING CREDSCO_BIN
+# load("d:/karina/docencia/sreferenciesppt/16.AssociatiusVisualitzacio/MultivariateAnalysis/PracticaR/credscok_bin")
+setwd("D:/karina/docencia/01areferenciesPPT/0DadesPractiques/CREDSCO")
+#dd <- read.table("credscoClean.csv",header=T, sep=";");
+
+library(FactoMineR)
+
+PCAres <- PCA(dd, quali.sup = c(1, 2, 4, 5, 7, 11, 13), graph = FALSE)
+
+PCAres$eig
+
+nc <- 5
+
+dadesClust <- PCAres$ind$coord
+Distancias <- dist(dadesClust)
+cluster <- hclust(Distancias, method = "ward.D2")
+plot(cluster)
+
+clut <- 6
+clases <- cutree(cluster, k = 6)
+
+dd$cluster <- clases
+
