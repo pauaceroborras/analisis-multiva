@@ -8,7 +8,7 @@ setwd("D:/karina/docencia/01areferenciesPPT/0DadesPractiques/CREDSCO")
 #dd <- read.table("credscoClean.csv",header=T, sep=";");
 
 library(FactoMineR)
-
+iris <- dadesfinals
 PCAres <- PCA(iris, quali.sup = c(1, 2, 4, 5, 7, 11, 13), graph = FALSE)
 
 PCAres$eig
@@ -37,7 +37,7 @@ rm(list.of.packages, new.packages)
 
 # ==============================================================================
 # Carreguem les dades
-iris<-dadesfinals
+
 head(iris)
 
 # ------------------------------------------------------------------------------
@@ -128,8 +128,24 @@ ggplot(datos_lda, aes(LD1, LD2)) +
 
 
 #HACER DUMMIES PARA QUE ENTREN LAS CATEGORICAS
-klaR::partimat(cluster ~ ., data = train[,c(3,6,8,9,10,12,14,15)], method = "lda", 
+train$Loyal  <- as.vector(model.matrix(~ Tipus_client, data = train)[,2])
+#train$Disloyal <- ifelse(train$Loyal == 1, 0, 1)
+train$Personal_travel <- as.vector(model.matrix(~ Tipus_viatge, data = train)[,2])
+#train$Business_travel <- ifelse(train$Personal_travel == 1, 0, 1)
+train$Eco <- as.vector(model.matrix(~ Classe_client, data = train)[,2])
+train$Eco_plus <- as.vector(model.matrix(~ Classe_client, data = train)[,3])
+#train$Business2 <- ifelse(train$Eco == 0 & train$Eco_plus == 0, 1, 0)
+train$satisfied <- as.vector(model.matrix(~ Satsifaccio, data = train)[,2])
+#train$Neutral_or_satisfied <- ifelse(train$satisfied == 0,1, 0)
+
+
+png("grafico.png", width=8000, height=6000) # Cambia el tamaño según necesites
+
+klaR::partimat(cluster ~ ., data = train[,c(3,6,8,9,10,12,14:20)], method = "lda", 
                image.colors = c("skyblue", "lightgrey", "yellow", "green", "pink", "navyblue"), col.mean = "red")
+dev.off()
+
+
 ## Por Ãºltimo, aplicando las funciones discriminantes a los datos reservados para 
 ## estudiar la capacidad predictiva del modelo, se obtiene la tabla conocida como 
 ## matriz de confusiÃ³n, donde se compara el grupo real con el pronosticado por el 
@@ -153,7 +169,7 @@ options(digits = 4)
 modelo_qda <- qda(cluster ~ ., data = train)
 modelo_qda
 
-partimat(Species ~ ., data = train, method = "qda", image.colors = c("skyblue", "lightgrey", "yellow"), col.mean = "red")
+partimat(cluster ~ ., data = train, method = "qda", image.colors = c("skyblue", "lightgrey", "yellow"), col.mean = "red")
 
 ## Como se aprecia, ahora los contornos de las Ã¡reas no son siempre lineales, sino 
 ## que incluyen fronteras cuadrÃ¡ticas. Por Ãºltimo, aplicando el discriminante 
